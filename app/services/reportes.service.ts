@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000/api' // 🎯 CORREGIR URL (puerto 5000, no 3000)
+const API_BASE_URL = 'https://backcreditos2025-backcreditos.up.railway.app/api' // 🎯 CORREGIR URL (puerto 5000, no 3000)
 
 export interface ReportePeriodo {
   creditosAprobados: number
