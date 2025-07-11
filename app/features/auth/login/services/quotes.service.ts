@@ -4,7 +4,7 @@ export interface Quote {
 }
 
 export async function getSpanishQuotes(): Promise<Quote[]> {
-  const response = await fetch('http://localhost:3000/api/frases-motivacion');
+  const response = await fetch('https://backcreditos2025-backcreditos.up.railway.app/api/frases-motivacion');
   if (!response.ok) {
     throw new Error('No se pudo obtener las frases');
   }
