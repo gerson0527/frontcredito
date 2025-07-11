@@ -1,0 +1,83 @@
+/* Estilos específicos para la página de login - independientes del tema */
+
+.login-container {
+  background-color: #ffffff !important;
+  color: #1f2937 !important;
+}
+
+.login-container * {
+  color: #1f2937 !important;
+}
+
+.login-container .login-card {
+  background-color: #ffffff !important;
+  border-color: #e5e7eb !important;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+}
+
+.login-container .login-title {
+  color: #1f2937 !important;
+}
+
+.login-container .login-label {
+  color: #374151 !important;
+}
+
+.login-container .login-input {
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #1f2937 !important;
+}
+
+.login-container .login-input:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 1px #3b82f6 !important;
+}
+
+.login-container .login-button {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+.login-container .login-button:hover {
+  background-color: #2563eb !important;
+}
+
+.login-container .login-progress-text {
+  color: #6b7280 !important;
+}
+
+.login-quote-section {
+  background-color: black !important;
+  color: #ffffff !important;
+}
+
+.login-quote-section * {
+  color: #ffffff !important;
+}
+
+.login-quote-section .quote-text {
+  color: #ffffff !important;
+}
+
+.login-quote-section .quote-author {
+  color: #ffffff !important;
+}
+
+.login-loading-spinner {
+  border-color: #ffffff !important;
+}
+
+.login-error-text {
+  color: #ffffff !important;
+}
+
+/* Forzar tema claro para toda la página de login */
+.login-page {
+  color-scheme: light !important;
+}
+
+/* Prevenir que los estilos oscuros se apliquen */
+.login-page [data-theme="dark"] {
+  color-scheme: light !important;
+}
