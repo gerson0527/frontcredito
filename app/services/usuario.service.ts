@@ -97,8 +97,9 @@ export interface UsuarioStatsResponse {
   }
 }
 
-const API_BASE_URL =  'http://localhost:3000/api'
-
+//const API_BASE_URL =  'http://localhost:3000/api'
+//prueba localhost
+//const API_BASE_URL = 'http://localhost:3000/api'
 export class UsuarioService {
   // Obtener usuarios con filtros y paginación
   static async getUsuarios(

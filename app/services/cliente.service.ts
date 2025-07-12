@@ -1,5 +1,5 @@
-const API_BASE_URL = 'https://backcreditos2025-backcreditos.up.railway.app/api'
-
+const API_BASE_URL = 'https://backcreditos2025-backcreditos.up.railway.app/api'//prueba localhost
+//const API_BASE_URL = 'http://localhost:3000/api'
 export interface Cliente {
   id?: string
   nombre: string
@@ -36,7 +36,6 @@ export const ClienteService = {
 
   // Crear un nuevo cliente
   createCliente: async (cliente: Omit<Cliente, 'id'>): Promise<Cliente> => {
-    console.log(cliente);
     const response = await fetch(`${API_BASE_URL}/clientes`, {
       method: 'POST',
       credentials: 'include',
@@ -45,7 +44,17 @@ export const ClienteService = {
       },
       body: JSON.stringify(cliente),
     })
-    if (!response.ok) throw new Error('Error al crear el cliente')
+    
+    if (!response.ok) {
+      // Intentar obtener el mensaje de error del servidor
+      try {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Error al crear el cliente')
+      } catch (parseError) {
+        throw new Error('Error al crear el cliente')
+      }
+    }
+    
     return response.json()
   },
 
@@ -59,7 +68,17 @@ export const ClienteService = {
       },
       body: JSON.stringify(cliente),
     })
-    if (!response.ok) throw new Error('Error al actualizar el cliente')
+    
+    if (!response.ok) {
+      // Intentar obtener el mensaje de error del servidor
+      try {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Error al actualizar el cliente')
+      } catch (parseError) {
+        throw new Error('Error al actualizar el cliente')
+      }
+    }
+    
     return response.json()
   },
 

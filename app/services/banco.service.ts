@@ -1,5 +1,6 @@
 const API_BASE_URL = 'https://backcreditos2025-backcreditos.up.railway.app/api'
-
+//prueba localhost
+//const API_BASE_URL = 'http://localhost:3000/api'
 export interface Banco {
   id?: string
   nombre: string

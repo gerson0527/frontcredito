@@ -63,11 +63,8 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
 
   const handleSave = async () => {
     try {
-      if (type === "cliente") {
-        await handleAddCliente(formData)
-      } else {
-        onSave(formData)
-      }
+      // Para todos los tipos, simplemente pasar los datos al componente padre
+      onSave(formData)
       setFormData({})
       onClose()
     } catch (error) {
@@ -135,59 +132,6 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
     }
   }
 
-  const handleAddCliente = async (data: any) => {
-    try {
-      const newCliente = await ClienteService.createCliente({
-        nombre: data.nombre,
-        apellido: data.apellido,
-        email: data.email,
-        dni: data.dni,
-        telefono: data.telefono,
-        direccion: data.direccion,
-        fechanacimiento: data.fechanacimiento,
-        ingresosMensuales: parseFloat(data.ingresos),
-        estado: data.estado,
-      })
-
-      if (setClientesData) {
-        setClientesData(prev => [
-          { ...newCliente, estadoVariant: getEstadoVariant(newCliente.estado) },
-          ...prev
-        ])
-      }
-
-      toast({
-        title: "Cliente agregado",
-        description: `${data.nombre} ha sido agregado al sistema correctamente.`,
-        variant: "success",
-      })
-
-      if (onAddNotification) {
-        onAddNotification({
-          type: "success",
-          title: "Nuevo cliente agregado",
-          description: `Se registró a ${data.nombre} en el sistema`,
-          read: false,
-        })
-      }
-
-      // Si estamos en el modal de crédito, actualizar el cliente seleccionado
-      if (type === "credito") {
-        handleSelectCliente(newCliente)
-      }
-
-      return newCliente
-    } catch (error) {
-      console.error(error)
-      toast({
-        title: "Error",
-        description: "No se pudo agregar el cliente",
-        variant: "destructive",
-      })
-      throw error
-    }
-  }
-
   if (isCreateClienteModalOpen) {
     return (
       <AddModal
@@ -199,7 +143,8 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
         }}
         onSave={async (clienteData) => {
           try {
-            await handleAddCliente(clienteData)
+            // Simplemente pasar los datos al componente padre
+            onSave(clienteData)
             setIsCreateClienteModalOpen(false)
             setOpen(true)
             handleSearch(clienteData.dni)
@@ -356,7 +301,7 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                   </SelectTrigger>
                   <SelectContent className="max-h-[200px]">
                     {bancos.map(banco => (
-                      <SelectItem key={banco.id} value={banco.id}>{banco.nombre}</SelectItem>
+                      <SelectItem key={banco.id} value={banco.id?.toString() || ''}>{banco.nombre}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -373,7 +318,7 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                   </SelectTrigger>
                   <SelectContent className="max-h-[200px]">
                     {financieras.map(financiera => (
-                      <SelectItem key={financiera.id} value={financiera.id}>{financiera.nombre}</SelectItem>
+                      <SelectItem key={financiera.id} value={financiera.id?.toString() || ''}>{financiera.nombre}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -390,7 +335,7 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                   </SelectTrigger>
                   <SelectContent className="max-h-[200px]">
                     {asesores.map(asesor => (
-                      <SelectItem key={asesor.id} value={asesor.id}>{asesor.nombre}</SelectItem>
+                      <SelectItem key={asesor.id} value={asesor.id?.toString() || ''}>{asesor.nombre}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

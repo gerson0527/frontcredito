@@ -33,9 +33,16 @@ export function TableFilter({ onFilterChange, filterOptions, placeholder = "Busc
   }
 
   const handleFilterChange = (key: string, value: string) => {
-    const newFilters = { ...activeFilters, [key]: value }
-    setActiveFilters(newFilters)
-    onFilterChange({ ...newFilters, search: searchTerm })
+    if (value === "") {
+      // Si el valor está vacío, remover el filtro
+      const { [key]: _, ...rest } = activeFilters
+      setActiveFilters(rest)
+      onFilterChange({ ...rest, search: searchTerm })
+    } else {
+      const newFilters = { ...activeFilters, [key]: value }
+      setActiveFilters(newFilters)
+      onFilterChange({ ...newFilters, search: searchTerm })
+    }
   }
 
   const clearFilter = (key: string) => {
@@ -84,6 +91,7 @@ export function TableFilter({ onFilterChange, filterOptions, placeholder = "Busc
                       <SelectValue placeholder="Seleccionar..." />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="">Todos</SelectItem>
                       {option.options.map((item) => (
                         <SelectItem key={item.value} value={item.value}>
                           {item.label}

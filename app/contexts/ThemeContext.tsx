@@ -34,9 +34,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     html.classList.add(newTheme)
     body.classList.add(newTheme)
     
-    html.style.colorScheme = newTheme
-    
-    console.log(`Tema visual aplicado: ${newTheme}`)
+    html.style.colorScheme = newTheme    
   }
 
   // 🎯 RESETEAR AL TEMA ORIGINAL

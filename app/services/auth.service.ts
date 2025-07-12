@@ -1,6 +1,9 @@
 // src/services/auth.service.ts
 const API_BASE_URL = 'https://backcreditos2025-backcreditos.up.railway.app'
 
+//prueba localhost
+//const API_BASE_URL = 'http://localhost:3000'
+
 export const AuthService = {
   login: async (credentials: { username: string; password: string }) => {
     try {

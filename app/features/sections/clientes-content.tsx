@@ -103,6 +103,7 @@ export function ClientesContent({ onAddNotification }: ClientesContentProps) {
     // Filtro de búsqueda
     if (
       filters.search &&
+      filters.search.trim() !== "" &&
       !cliente.nombre.toLowerCase().includes(filters.search.toLowerCase()) &&
       !cliente.email.toLowerCase().includes(filters.search.toLowerCase())
     ) {
@@ -110,12 +111,12 @@ export function ClientesContent({ onAddNotification }: ClientesContentProps) {
     }
 
     // Filtro de estado
-    if (filters.estado && cliente.estado !== filters.estado) {
+    if (filters.estado && filters.estado !== "" && cliente.estado !== filters.estado) {
       return false
     }
 
     // Filtro de créditos activos
-    if (filters.creditosActivos) {
+    if (filters.creditosActivos && filters.creditosActivos !== "") {
       const creditosActivos = cliente.creditosActivos || 0
       if (filters.creditosActivos === "0" && creditosActivos !== 0) return false
       if (filters.creditosActivos === "1" && creditosActivos !== 1) return false
@@ -166,6 +167,8 @@ export function ClientesContent({ onAddNotification }: ClientesContentProps) {
   const handleSaveCliente = async (data: any) => {
     try {
       const updatedCliente = await ClienteService.updateCliente(data.id, data)
+      
+      // Actualizar el cliente en el estado local
       setClientesData(prev =>
         prev.map(cliente =>
           cliente.id === data.id
@@ -173,6 +176,9 @@ export function ClientesContent({ onAddNotification }: ClientesContentProps) {
             : cliente
         )
       )
+
+      // Cerrar el modal
+      setModalState({ isOpen: false, action: null, data: null })
 
       toast({
         title: "Cliente actualizado",
@@ -201,7 +207,12 @@ export function ClientesContent({ onAddNotification }: ClientesContentProps) {
       const clienteId = modalState.data?.id
 
       await ClienteService.deleteCliente(clienteId)
+      
+      // Eliminar el cliente del estado local
       setClientesData(prev => prev.filter(cliente => cliente.id !== clienteId))
+
+      // Cerrar el modal
+      setModalState({ isOpen: false, action: null, data: null })
 
       toast({
         title: "Cliente eliminado",
@@ -226,21 +237,46 @@ export function ClientesContent({ onAddNotification }: ClientesContentProps) {
 
   const handleAddCliente = async (data: any) => {
     try {
+      // Llamada al servicio (solo para crear en el servidor)
       const newCliente = await ClienteService.createCliente({
         nombre: data.nombre,
-        apellido: data.apellido, // Cambiar de Apellido a apellido
+        apellido: data.apellido,
         email: data.email,
         dni: data.dni,
         telefono: data.telefono,
         direccion: data.direccion,
         fechanacimiento: data.fechanacimiento,
-        ingresosMensuales: parseFloat(data.ingresos), // Cambiar de ingresos a ingresosMensuales
-        estado: data.estado,
+        ingresosMensuales: parseFloat(data.ingresos),
+        estado: data.estado, 
       })
-      setClientesData(prev => [
-        { ...newCliente, estadoVariant: getEstadoVariant(newCliente.estado) },
-        ...prev
-      ])
+      
+      console.log('✅ Cliente creado en servidor:', newCliente) // Debug
+
+      // 🔧 CREAR EL CLIENTE CON TODAS LAS PROPIEDADES NECESARIAS
+      const clienteCompleto: ClienteWithVariant = {
+        ...newCliente,
+        estadoVariant: getEstadoVariant(newCliente.estado),
+        creditosActivos: 0 // 🔧 Asegurar que tenga esta propiedad
+      }
+      
+      console.log('🔄 Cliente procesado:', clienteCompleto) // Debug
+
+      // 🔧 ACTUALIZAR ESTADO DE FORMA MÁS ROBUSTA
+      setClientesData(prevClientes => {
+        const nuevosClientes = [clienteCompleto, ...prevClientes]
+        console.log('📊 Estado anterior:', prevClientes.length, 'clientes')
+        console.log('📊 Estado nuevo:', nuevosClientes.length, 'clientes')
+        console.log('🆕 Nuevo cliente agregado:', clienteCompleto.nombre)
+        return nuevosClientes
+      })
+
+      // 🔧 RESETEAR FILTROS Y PAGINACIÓN PARA MOSTRAR EL NUEVO CLIENTE
+      console.log('🔍 Filtros antes:', filters)
+      setFilters({}) // Limpiar filtros
+      setCurrentPage(1) // Ir a primera página
+      
+      // Cerrar modal
+      setAddModalOpen(false)
 
       toast({
         title: "Cliente agregado",
@@ -254,11 +290,12 @@ export function ClientesContent({ onAddNotification }: ClientesContentProps) {
         description: `Se registró a ${data.nombre} en el sistema`,
         read: false,
       })
+      
     } catch (error) {
-      console.error(error)  // Agrega esta línea para imprimir el error en la consola
+      console.error('❌ Error al agregar cliente:', error)
       toast({
         title: "Error",
-        description: "No se pudo agregar el cliente",
+        description: error instanceof Error ? error.message : "No se pudo agregar el cliente",
         variant: "destructive",
       })
     }
