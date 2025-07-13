@@ -145,7 +145,7 @@ export function usePermissions() {
     if (!user || !user.permisos) return false;
     
     // El superadmin tiene todos los permisos
-    if (user.rol === 'superadmin') return true;
+    if (user.rol === 'admin') return true;
     
     // Verificar permisos específicos
     const permisos = user.permisos;
