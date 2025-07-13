@@ -38,9 +38,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar autenticación al cargar la aplicación
-    checkAuth();
+    // Solo verificar autenticación si hay indicios de sesión activa
+    // En este caso, como usamos cookies con credentials: 'include',
+    // podemos verificar si hay cookies de sesión
+    checkAuthIfNeeded();
   }, []);
+
+  const checkAuthIfNeeded = async () => {
+    try {
+      // Verificar si hay cookies que indiquen una posible sesión activa
+      // Como usamos httpOnly cookies, no podemos leerlas directamente,
+      // pero podemos hacer una verificación silenciosa solo si creemos que hay sesión
+      if (document.cookie.includes('connect.sid') || localStorage.getItem('hasActiveSession')) {
+        await checkAuth();
+      } else {
+        // No hay indicios de sesión, marcar como no autenticado directamente
+        setIsAuthenticated(false);
+        setUser(null);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Error verificando sesión:', error);
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsLoading(false);
+    }
+  };
 
   const checkAuth = async () => {
     try {
@@ -51,15 +74,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.success && response.user) { 
         setUser(response.user);
         setIsAuthenticated(true);
+        // Marcar que hay una sesión activa
+        localStorage.setItem('hasActiveSession', 'true');
       } else {
         // No hay sesión activa o expiró
         setUser(null);
         setIsAuthenticated(false);
+        localStorage.removeItem('hasActiveSession');
       }
     } catch (error) {
       console.error('Error verificando autenticación:', error);
       setUser(null);
       setIsAuthenticated(false);
+      localStorage.removeItem('hasActiveSession');
     } finally {
       setIsLoading(false);
     }
@@ -73,6 +100,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (result.success && result.user) {
         setUser(result.user);
         setIsAuthenticated(true);
+        // Marcar que hay una sesión activa
+        localStorage.setItem('hasActiveSession', 'true');
         return { success: true };
       } else {
         return { 
@@ -101,6 +130,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
       setIsAuthenticated(false);
       setIsLoading(false);
+      // Limpiar marca de sesión activa
+      localStorage.removeItem('hasActiveSession');
     }
   };
 

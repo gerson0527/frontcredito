@@ -54,7 +54,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setOriginalTheme(userTheme) // 🎯 GUARDAR TEMA ORIGINAL
         setTheme(userTheme) // 🎯 APLICAR TEMA ACTUAL
       } else {
-        console.log('Usuario sin tema, usando dark por defecto')
         setOriginalTheme('dark')
         setTheme('dark')
       }

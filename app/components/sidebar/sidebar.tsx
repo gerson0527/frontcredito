@@ -1,8 +1,8 @@
 import { Building2, DollarSign, CreditCard, FileText, Home, Target, UserCheck, Users, Settings, LogOut } from "lucide-react"
-import { AuthService } from '@/services/auth.service'
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate } from 'react-router'
 import { usePermissions, type PermissionModule } from '@/hooks/use-permissions' // 🎯 IMPORTAR HOOK DE PERMISOS
+import { useAuth } from '@/contexts/AuthContext' // 🎯 IMPORTAR useAuth
 
 interface SidebarProps {
   activeSection: string
@@ -30,6 +30,7 @@ export function Sidebar({ activeSection, onSectionChange, className = "" }: Side
   const { toast } = useToast();
   const navigate = useNavigate();
   const { canViewModule, user } = usePermissions(); // 🎯 USAR HOOK DE PERMISOS
+  const { logout } = useAuth(); // 🎯 OBTENER LOGOUT DEL CONTEXTO
 
   // 🎯 FILTRAR ITEMS SEGÚN PERMISOS
   const visibleItems = sidebarItems.filter(item => {
@@ -42,17 +43,26 @@ export function Sidebar({ activeSection, onSectionChange, className = "" }: Side
 
   const handleLogout = async () => {
     try {
-      await AuthService.logout()
-      navigate('/')
+      // Usar el logout del contexto que maneja todo el estado
+      await logout();
+      
+      // Forzar navegación inmediata como respaldo
+      navigate('/', { replace: true });
+      
       toast({
         title: 'Cierre de sesión',
         description: 'Has cerrado sesión exitosamente',
         variant: 'default',
-      })
+      });
     } catch (error) {
-      console.error('Error al cerrar sesión:', error)
+      console.error('Error al cerrar sesión:', error);
+      toast({
+        title: 'Error',
+        description: 'Hubo un problema al cerrar la sesión',
+        variant: 'destructive',
+      });
     }
-  }
+  };
 
   return (
     <div className={`flex h-screen max-h-screen flex-col bg-muted/40 fixed top-0 left-0 w-[220px] lg:w-[280px] ${className}`}>
