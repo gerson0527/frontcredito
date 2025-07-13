@@ -22,12 +22,6 @@ export function usePermissions() {
     if (!user) {
       return false
     }
-
-    // Si es superadmin, tiene todos los permisos
-    if (user.rol === 'superadmin') {
-      return true
-    }
-
     // Si es admin, tiene todos los permisos
     if (user.rol === 'admin') {
       return true
