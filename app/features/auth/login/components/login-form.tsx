@@ -42,14 +42,11 @@ export function LoginForm() {
     }, 100);
 
     try {
-      console.log("🔄 Iniciando login...");
       const response = await login(credentials);
-      console.log("📡 Respuesta del servidor:", response);
       
       if (response.success) {
         setProgress(100);
         
-        console.log("✅ Login exitoso, mostrando toast...");
         toast({
           title: "Inicio de sesión exitoso",
           description: "Bienvenido!",

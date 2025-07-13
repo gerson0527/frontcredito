@@ -79,13 +79,6 @@ const createPermisosAsesor = (): PermisosUsuario => ({
 export function GestionUsuariosContent({ onAddNotification }: GestionUsuariosContentProps) {
   const { toast } = useToast()
   const { canView, canCreate, canEdit, canDelete } = usePermissions() // 🎯 USAR HOOK DE PERMISOS CORRECTO
-  const { user } = useAuth() // 🎯 OBTENER DATOS DEL USUARIO PARA DEBUG
-  
-  // 🔍 DEBUG: Verificar datos del usuario
-  console.log('🔍 Usuario actual:', user)
-  console.log('🔍 Permisos del usuario:', user?.permisos)
-  console.log('🔍 Rol del usuario:', user?.rol)
-  console.log('🔍 Puede ver gestión usuarios:', canView('gestionUsuarios'))
   
   // Estados
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
