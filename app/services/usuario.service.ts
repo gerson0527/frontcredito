@@ -97,7 +97,7 @@ export interface UsuarioStatsResponse {
   }
 }
 
-//const API_BASE_URL =  'http://localhost:3000/api'
+const API_BASE_URL =  'https://backcreditos2025-backcreditos.up.railway.app/api' // URL del backend
 //prueba localhost
 //const API_BASE_URL = 'http://localhost:3000/api'
 export class UsuarioService {
