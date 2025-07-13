@@ -26,7 +26,7 @@ import { Label } from "@/components/ui/label"
 import { TablePagination } from "@/components/table-pagination/table-pagination"
 import { useToast } from "@/hooks/use-toast"
 import { usePermissions } from "@/hooks/use-permissions" // 🎯 IMPORTAR HOOK DE PERMISOS CORRECTO
-import { useAuth } from "@/contexts/AuthContext" // 🎯 IMPORTAR useAuth POR SEPARADO
+import { useAuth } from "../../contexts/AuthContext" // 🎯 IMPORTAR useAuth POR SEPARADO
 import type { Notification } from "@/components/notifications-panel/notifications-panel"
 import { 
   UsuarioService, 
