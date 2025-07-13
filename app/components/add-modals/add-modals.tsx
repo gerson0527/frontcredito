@@ -832,9 +832,8 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                     <SelectValue placeholder="Seleccionar estado" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Activa">Activa</SelectItem>
-                    <SelectItem value="Revisión">Revisión</SelectItem>
-                    <SelectItem value="Inactiva">Inactiva</SelectItem>
+                    <SelectItem value="Activo">Activo</SelectItem>
+                    <SelectItem value="Inactivo">Inactivo</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

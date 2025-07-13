@@ -31,9 +31,8 @@ const filterOptions = [
     key: "estado",
     label: "Estado",
     options: [
-      { label: "Activa", value: "Activa" },
-      { label: "Revisión", value: "Revisión" },
-      { label: "Inactiva", value: "Inactiva" },
+      { label: "Activo", value: "Activo" },
+      { label: "Inactivo", value: "Inactivo" },
     ],
   },
   {
@@ -92,11 +91,11 @@ export function FinancierasContent({ onAddNotification }: FinancierasContentProp
   const loadFinancieras = async () => {
     try {
       const data = await FinancieraService.getFinancieras()
-      // Asignar estado activo o inactivo ya que lega 1 o 0 
+      // Asignar estado activo o inactivo ya que llega 1 o 0 desde el backend
       // Transforma cada item
       const dataConEstado = data.map(financiera => ({
         ...financiera,
-        estado: financiera.estado === 1 ? 'Activo' : 'Inactivo'
+        estado: (financiera.estado === 1 || financiera.estado === '1' || financiera.estado === 'Activo') ? 'Activo' : 'Inactivo'
       }));
       setFinancierasData(dataConEstado)
     } catch (error) {
@@ -111,11 +110,12 @@ export function FinancierasContent({ onAddNotification }: FinancierasContentProp
   }
 
   // Generar estadoVariant basado en el estado
-  const getEstadoVariant = (estado: string) => {
-    switch (estado) {
-      case "Activa":
+  const getEstadoVariant = (estado: string | number) => {
+    const estadoTexto = typeof estado === 'number' ? (estado === 1 ? 'Activo' : 'Inactivo') : estado
+    switch (estadoTexto) {
+      case "Activo":
         return "default" as const
-      case "Inactiva":
+      case "Inactivo":
         return "destructive" as const
       default:
         return "secondary" as const
@@ -144,8 +144,8 @@ export function FinancierasContent({ onAddNotification }: FinancierasContentProp
     }
 
     // Filtro de rango de tasa
-    if (filters.rangoTasa) {
-      const tasa = Number.parseFloat(financiera?.tasaPromedio.replace("%", ""))
+    if (filters.rangoTasa && financiera.tasaPromedio) {
+      const tasa = Number.parseFloat(financiera.tasaPromedio.replace("%", ""))
       if (filters.rangoTasa === "baja" && tasa >= 15) return false
       if (filters.rangoTasa === "media" && (tasa < 15 || tasa > 20)) return false
       if (filters.rangoTasa === "alta" && tasa <= 20) return false
@@ -161,7 +161,7 @@ export function FinancierasContent({ onAddNotification }: FinancierasContentProp
 
   // Generar nuevo ID
   const generateNewId = () => {
-    const maxId = Math.max(...financierasData.map((f) => Number.parseInt(f.id)))
+    const maxId = Math.max(...financierasData.map((f) => Number.parseInt(f.id || '0')))
     return (maxId + 1).toString()
   }
 
@@ -181,7 +181,15 @@ export function FinancierasContent({ onAddNotification }: FinancierasContentProp
   const handleSaveFinanciera = async (data: Financiera) => {
     try {
       if (data.id) {
-        await FinancieraService.updateFinanciera(data.id, data)
+        // Convertir estado de texto a número para el backend
+        const dataParaBackend = {
+          ...data,
+          estado: data.estado === 'Activo' ? 1 : 0 // 🎯 CONVERTIR ESTADO
+        }
+        
+        await FinancieraService.updateFinanciera(data.id, dataParaBackend)
+        
+        // Mantener el estado como texto en el frontend
         setFinancierasData((prev) =>
           prev.map((financiera) =>
             financiera.id === data.id ? { ...data, estadoVariant: getEstadoVariant(data.estado) } : financiera
@@ -243,13 +251,24 @@ export function FinancierasContent({ onAddNotification }: FinancierasContentProp
 
   const handleAddFinanciera = async (data: Omit<Financiera, 'id'>) => {
     try {
-      const newFinanciera = await FinancieraService.createFinanciera({
+      // Convertir estado de texto a número para el backend
+      const dataParaBackend = {
         ...data,
+        estado: data.estado === 'Activo' ? 1 : 0, // 🎯 CONVERTIR ESTADO
         creditosActivos: 0,
         montoTotal: "$0M",
-      })
+      }
 
-      setFinancierasData((prev) => [{ ...newFinanciera, estadoVariant: getEstadoVariant(newFinanciera.estado) }, ...prev])
+      const newFinanciera = await FinancieraService.createFinanciera(dataParaBackend)
+      console.log("Nueva financiera creada:", newFinanciera)
+      // Convertir el estado de vuelta a texto para el frontend
+      const financieraParaFrontend = {
+        ...newFinanciera,
+        estado: newFinanciera.estado === true ? 'Activo' : 'Inactivo'
+      }
+      console.log("Nueva financiera creada:", financieraParaFrontend)
+
+      setFinancierasData((prev) => [{ ...financieraParaFrontend, estadoVariant: getEstadoVariant(financieraParaFrontend.estado) }, ...prev])
 
       toast({
         title: "Financiera agregada",
@@ -369,7 +388,7 @@ export function FinancierasContent({ onAddNotification }: FinancierasContentProp
       </Card>
 
       <ActionModals
-        type="financiera"
+        type="financiera_edit"
         action={modalState.action}
         data={modalState.data}
         isOpen={modalState.isOpen}

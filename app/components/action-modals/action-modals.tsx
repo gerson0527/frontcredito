@@ -25,7 +25,7 @@ interface ActionModalsProps {
 }
 
 export function ActionModals({ type, action, data, isOpen, onClose, onSave, onDelete }: ActionModalsProps) {
-  const [editData, setEditData] = useState({})
+  const [editData, setEditData] = useState<any>({})
 
   // 🎯 FUNCIÓN PARA FORMATEAR FECHAS
   const formatDateForInput = (dateString: string | null | undefined) => {
@@ -598,19 +598,21 @@ export function ActionModals({ type, action, data, isOpen, onClose, onSave, onDe
             </div>
           </div>
         )
-      case "financiera":
+      case "financiera_edit":
         return (
           <div className="space-y-4">
+            {/* Primera fila: Nombre y Especialización */}
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="nombre">Nombre de la Financiera *</Label>
+              <div className="space-y-2">
+                <Label htmlFor="nombre">Nombre de la financiera *</Label>
                 <Input
                   id="nombre"
+                  placeholder="Financiera ABC"
                   value={editData.nombre || ""}
                   onChange={(e) => setEditData({ ...editData, nombre: e.target.value })}
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="especializacion">Especialización</Label>
                 <Select
                   value={editData.especializacion || ""}
@@ -628,121 +630,69 @@ export function ActionModals({ type, action, data, isOpen, onClose, onSave, onDe
                   </SelectContent>
                 </Select>
               </div>
-              <div>
-                <Label htmlFor="personaContacto">Persona de Contacto</Label>
+            </div>
+
+            {/* Segunda fila: Contacto */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="personaContacto">Persona de contacto</Label>
                 <Input
                   id="personaContacto"
+                  placeholder="Carlos López"
                   value={editData.personaContacto || ""}
                   onChange={(e) => setEditData({ ...editData, personaContacto: e.target.value })}
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="telefono">Teléfono</Label>
                 <Input
                   id="telefono"
+                  placeholder="+1 234 567 8900"
                   value={editData.telefono || ""}
                   onChange={(e) => setEditData({ ...editData, telefono: e.target.value })}
                 />
               </div>
-              <div>
+            </div>
+
+            {/* Tercera fila: Email y Tasa */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
+                  placeholder="contacto@financiera.com"
                   value={editData.email || ""}
                   onChange={(e) => setEditData({ ...editData, email: e.target.value })}
                 />
               </div>
-              <div>
-                <Label htmlFor="tasaPromedio">Tasa Promedio (%)</Label>
+              <div className="space-y-2">
+                <Label htmlFor="tasaPromedio">Tasa promedio (%)</Label>
                 <Input
                   id="tasaPromedio"
                   type="number"
-                  step="0.01"
+                  step="0.1"
+                  placeholder="15.8"
                   value={editData.tasaPromedio || ""}
                   onChange={(e) => setEditData({ ...editData, tasaPromedio: e.target.value })}
                 />
               </div>
-              <div>
-                <Label htmlFor="comisionfin">Comisión por Millón (COP) *</Label>
+            </div>
+
+            {/* Cuarta fila: Comisión y Estado */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="comisionfin">Comisión por millón (COP) *</Label>
                 <Input
                   id="comisionfin"
                   type="number"
                   step="1000"
-                  placeholder="45000"
+                  placeholder="4000000"
                   value={editData.comisionfin || ""}
                   onChange={(e) => setEditData({ ...editData, comisionfin: e.target.value })}
                 />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Comisión que se paga por cada millón de pesos gestionado
-                </p>
               </div>
-              <div>
-                <Label htmlFor="estado">Estado</Label>
-                <Select
-                  value={editData.estado?.toString() || "true"}
-                  onValueChange={(value) => setEditData({ ...editData, estado: value === "true" })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Seleccionar estado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="true">Activa</SelectItem>
-                    <SelectItem value="false">Inactiva</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="descripcion">Descripción</Label>
-              <Textarea
-                id="descripcion"
-                value={editData.descripcion || ""}
-                onChange={(e) => setEditData({ ...editData, descripcion: e.target.value })}
-                rows={2}
-              />
-            </div>
-          </div>
-        )
-      case "financiera_edit":
-        return (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="nombre">Nombre de la Financiera</Label>
-                <Input
-                  id="nombre"
-                  value={editData.nombre || ""}
-                  onChange={(e) => setEditData({ ...editData, nombre: e.target.value })}
-                />
-              </div>
-              <div>
-                <Label htmlFor="especializacion">Especialización</Label>
-                <Select
-                  value={editData.especializacion || ""}
-                  onValueChange={(value) => setEditData({ ...editData, especializacion: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Seleccionar especialización" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Créditos personales">Créditos personales</SelectItem>
-                    <SelectItem value="Microcréditos">Microcréditos</SelectItem>
-                    <SelectItem value="Créditos vehiculares">Créditos vehiculares</SelectItem>
-                    <SelectItem value="Créditos hipotecarios">Créditos hipotecarios</SelectItem>
-                    <SelectItem value="Créditos empresariales">Créditos empresariales</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="tasaPromedio">Tasa Promedio</Label>
-                <Input
-                  id="tasaPromedio"
-                  value={editData.tasaPromedio || ""}
-                  onChange={(e) => setEditData({ ...editData, tasaPromedio: e.target.value })}
-                />
-              </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="estado">Estado</Label>
                 <Select
                   value={editData.estado || ""}
@@ -752,12 +702,23 @@ export function ActionModals({ type, action, data, isOpen, onClose, onSave, onDe
                     <SelectValue placeholder="Seleccionar estado" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Activa">Activa</SelectItem>
-                    <SelectItem value="Revisión">Revisión</SelectItem>
-                    <SelectItem value="Inactiva">Inactiva</SelectItem>
+                    <SelectItem value="Activo">Activo</SelectItem>
+                    <SelectItem value="Inactivo">Inactivo</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+
+            {/* Quinta fila: Descripción */}
+            <div className="space-y-2">
+              <Label htmlFor="descripcion">Descripción</Label>
+              <Textarea
+                id="descripcion"
+                placeholder="Describe los servicios y características de la financiera..."
+                value={editData.descripcion || ""}
+                onChange={(e) => setEditData({ ...editData, descripcion: e.target.value })}
+                rows={3}
+              />
             </div>
           </div>
         )
@@ -1160,7 +1121,7 @@ export function ActionModals({ type, action, data, isOpen, onClose, onSave, onDe
         cliente: "Cliente",
         banco: "Banco",
         asesor: "Asesor",
-        financiera: "Financiera",
+        financiera_edit: "Financiera",
         credito: "Crédito",
         objetivo: "Objetivo",
       }[type] || "Registro"

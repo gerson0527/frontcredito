@@ -8,7 +8,7 @@ export interface Financiera {
   creditosActivos?: number
   montoTotal?: string
   tasaPromedio?: string
-  estado: string
+  estado: string | number | boolean  // 🎯 PUEDE SER STRING O NUMBER
   estadoVariant?: 'default' | 'destructive' | 'secondary'
   contacto: string
   telefono: string
