@@ -1,5 +1,5 @@
 // Hook personalizado para manejar permisos
-import { useUser } from "@/contexts/UserContext"
+import { useAuth } from "@/contexts/AuthContext"
 
 export type PermissionModule = 
   | 'creditos' 
@@ -16,10 +16,25 @@ export type PermissionModule =
 export type PermissionAction = 'ver' | 'crear' | 'editar' | 'eliminar'
 
 export function usePermissions() {
-  const { user } = useUser()
+  const { user } = useAuth()
 
   const hasPermission = (module: PermissionModule, action: PermissionAction): boolean => {
-    if (!user || !user.permisos) {
+    if (!user) {
+      return false
+    }
+
+    // Si es superadmin, tiene todos los permisos
+    if (user.rol === 'superadmin') {
+      return true
+    }
+
+    // Si es admin, tiene todos los permisos
+    if (user.rol === 'admin') {
+      return true
+    }
+
+    // Verificar permisos específicos
+    if (!user.permisos) {
       return false
     }
 
@@ -61,7 +76,24 @@ export function usePermissions() {
   }
 
   const isAdmin = (): boolean => {
-    return user?.role === 'admin'
+    return user?.rol === 'admin' || user?.rol === 'superadmin'
+  }
+
+  // Alias para compatibilidad con otros componentes
+  const canView = (module: PermissionModule): boolean => {
+    return canViewModule(module)
+  }
+
+  const canCreate = (module: PermissionModule): boolean => {
+    return canCreateModule(module)
+  }
+
+  const canEdit = (module: PermissionModule): boolean => {
+    return canEditModule(module)
+  }
+
+  const canDelete = (module: PermissionModule): boolean => {
+    return canDeleteFromModule(module)
   }
 
   return {
@@ -72,6 +104,11 @@ export function usePermissions() {
     canCreateModule,
     canEditModule,
     canDeleteFromModule,
+    // Alias para otros componentes
+    canView,
+    canCreate,
+    canEdit,
+    canDelete,
     isAdmin
   }
 }

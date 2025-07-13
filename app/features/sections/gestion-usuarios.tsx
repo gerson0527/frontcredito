@@ -23,10 +23,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { TablePagination } from "@/components/table-pagination/table-pagination"
 import { useToast } from "@/hooks/use-toast"
-import { usePermissions, useAuth } from "@/contexts/AuthContext" // 🎯 IMPORTAR HOOK DE PERMISOS CORRECTO
+import { usePermissions } from "@/hooks/use-permissions" // 🎯 IMPORTAR HOOK DE PERMISOS CORRECTO
+import { useAuth } from "@/contexts/AuthContext" // 🎯 IMPORTAR useAuth POR SEPARADO
 import type { Notification } from "@/components/notifications-panel/notifications-panel"
 import { 
   UsuarioService, 
