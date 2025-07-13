@@ -26,7 +26,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { TablePagination } from "@/components/table-pagination/table-pagination"
 import { useToast } from "@/hooks/use-toast"
-import { usePermissions } from "@/hooks/use-permissions" // 🎯 IMPORTAR HOOK DE PERMISOS
+import { usePermissions, useAuth } from "@/contexts/AuthContext" // 🎯 IMPORTAR HOOK DE PERMISOS CORRECTO
 import type { Notification } from "@/components/notifications-panel/notifications-panel"
 import { 
   UsuarioService, 
@@ -78,7 +78,14 @@ const createPermisosAsesor = (): PermisosUsuario => ({
 
 export function GestionUsuariosContent({ onAddNotification }: GestionUsuariosContentProps) {
   const { toast } = useToast()
-  const { canCreateModule, canEditModule, canDeleteFromModule, canViewModule } = usePermissions() // 🎯 USAR HOOK DE PERMISOS
+  const { canView, canCreate, canEdit, canDelete } = usePermissions() // 🎯 USAR HOOK DE PERMISOS CORRECTO
+  const { user } = useAuth() // 🎯 OBTENER DATOS DEL USUARIO PARA DEBUG
+  
+  // 🔍 DEBUG: Verificar datos del usuario
+  console.log('🔍 Usuario actual:', user)
+  console.log('🔍 Permisos del usuario:', user?.permisos)
+  console.log('🔍 Rol del usuario:', user?.rol)
+  console.log('🔍 Puede ver gestión usuarios:', canView('gestionUsuarios'))
   
   // Estados
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
@@ -430,7 +437,7 @@ export function GestionUsuariosContent({ onAddNotification }: GestionUsuariosCon
   }
 
   // 🎯 VERIFICAR PERMISOS DE ACCESO AL MÓDULO
-  if (!canViewModule('gestionUsuarios')) {
+  if (!canView('gestionUsuarios')) {
     return (
       <div className="flex items-center justify-center h-64">
         <Card className="w-full max-w-md">
@@ -462,7 +469,7 @@ export function GestionUsuariosContent({ onAddNotification }: GestionUsuariosCon
         <Button 
           onClick={() => openModal('add')} 
           className="gap-2" 
-          disabled={isLoading || !canCreateModule('gestionUsuarios')} // 🎯 VALIDAR PERMISOS
+          disabled={isLoading || !canCreate('gestionUsuarios')} // 🎯 VALIDAR PERMISOS
         >
           <UserPlus className="h-4 w-4" />
           Nuevo Usuario
@@ -685,7 +692,7 @@ export function GestionUsuariosContent({ onAddNotification }: GestionUsuariosCon
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               {/* 🎯 VER DETALLES - Siempre disponible si puede ver el módulo */}
-                              {canViewModule('gestionUsuarios') && (
+                              {canView('gestionUsuarios') && (
                                 <DropdownMenuItem onClick={() => openModal('view', usuario)}>
                                   <Eye className="mr-2 h-4 w-4" />
                                   Ver detalles
@@ -693,7 +700,7 @@ export function GestionUsuariosContent({ onAddNotification }: GestionUsuariosCon
                               )}
                               
                               {/* 🎯 EDITAR - Solo si tiene permisos de editar */}
-                              {canEditModule('gestionUsuarios') && (
+                              {canEdit('gestionUsuarios') && (
                                 <DropdownMenuItem onClick={() => openModal('edit', usuario)}>
                                   <Edit className="mr-2 h-4 w-4" />
                                   Editar
@@ -701,7 +708,7 @@ export function GestionUsuariosContent({ onAddNotification }: GestionUsuariosCon
                               )}
                               
                               {/* 🎯 ELIMINAR - Solo si tiene permisos de eliminar */}
-                              {canDeleteFromModule('gestionUsuarios') && (
+                              {canDelete('gestionUsuarios') && (
                                 <DropdownMenuItem 
                                   onClick={() => openModal('delete', usuario)}
                                   className="text-destructive"
