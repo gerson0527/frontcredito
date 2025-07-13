@@ -1,4 +1,5 @@
-const API_BASE_URL = 'https://backcreditos2025-backcreditos.up.railway.app/api'//prueba localhost
+const API_BASE_URL = 'https://backcreditos2025-backcreditos.up.railway.app/api'
+//prueba localhost
 //const API_BASE_URL = 'http://localhost:3000/api'
 export interface Financiera {
   id?: string
@@ -12,6 +13,8 @@ export interface Financiera {
   contacto: string
   telefono: string
   email: string
+  comisionfin?: number | string // 🎯 AGREGAR CAMPO DE COMISIÓN
+  personaContacto?: string // 🎯 AGREGAR PARA COMPATIBILIDAD
 }
 
 export const FinancieraService = {

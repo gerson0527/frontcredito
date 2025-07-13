@@ -11,6 +11,7 @@ export interface Banco {
   tasaBase: string
   direccion: string
   estado: boolean
+  comisionban?: number | string // 🎯 AGREGAR CAMPO DE COMISIÓN
   estadoVariant?: 'default' | 'destructive' | 'secondary'
 }
 

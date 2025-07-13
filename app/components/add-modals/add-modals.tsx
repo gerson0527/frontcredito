@@ -608,6 +608,7 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
       case "banco":
         return (
           <div className="space-y-4">
+            {/* Primera fila: Nombre y Tipo */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="nombre">Nombre del banco *</Label>
@@ -634,6 +635,10 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+
+            {/* Segunda fila: Contacto */}
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="personaContacto">Persona de contacto *</Label>
                 <Input
@@ -652,6 +657,10 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                   onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
                 />
               </div>
+            </div>
+
+            {/* Tercera fila: Email y Tasa */}
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email *</Label>
                 <Input
@@ -674,9 +683,23 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                 />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="estado">Estado *</Label>
-              <Select
+
+            {/* Cuarta fila: Comisión y Estado */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="comisionban">Comisión por millón (COP) *</Label>
+                <Input
+                  id="comisionban"
+                  type="number"
+                  step="1000"
+                  placeholder="5000000"
+                  value={formData.comisionban || ""}
+                  onChange={(e) => setFormData({ ...formData, comisionban: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="estado">Estado *</Label>
+                <Select
                   value={formData.estado || ""}
                   onValueChange={(value) => setFormData({ ...formData, estado: value })}
                 >
@@ -688,7 +711,10 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                     <SelectItem value="Inactivo">Inactivo</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
             </div>
+
+            {/* Quinta fila: Dirección */}
             <div className="space-y-2">
               <Label htmlFor="direccion">Dirección *</Label>
               <Textarea
@@ -705,6 +731,7 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
       case "financiera":
         return (
           <div className="space-y-4">
+            {/* Primera fila: Nombre y Especialización */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="nombre">Nombre de la financiera *</Label>
@@ -733,13 +760,17 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+
+            {/* Segunda fila: Contacto */}
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="contacto">Persona de contacto</Label>
+                <Label htmlFor="personaContacto">Persona de contacto</Label>
                 <Input
-                  id="contacto"
+                  id="personaContacto"
                   placeholder="Carlos López"
-                  value={formData.contacto || ""}
-                  onChange={(e) => setFormData({ ...formData, contacto: e.target.value })}
+                  value={formData.personaContacto || ""}
+                  onChange={(e) => setFormData({ ...formData, personaContacto: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
@@ -751,6 +782,10 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                   onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
                 />
               </div>
+            </div>
+
+            {/* Tercera fila: Email y Tasa */}
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -773,6 +808,39 @@ export function AddModal({ type, isOpen, onClose, onSave, setClientesData, onAdd
                 />
               </div>
             </div>
+
+            {/* Cuarta fila: Comisión y Estado */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="comisionfin">Comisión por millón (COP) *</Label>
+                <Input
+                  id="comisionfin"
+                  type="number"
+                  step="1000"
+                  placeholder="4000000"
+                  value={formData.comisionfin || ""}
+                  onChange={(e) => setFormData({ ...formData, comisionfin: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="estado">Estado</Label>
+                <Select
+                  value={formData.estado || ""}
+                  onValueChange={(value) => setFormData({ ...formData, estado: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Activa">Activa</SelectItem>
+                    <SelectItem value="Revisión">Revisión</SelectItem>
+                    <SelectItem value="Inactiva">Inactiva</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Quinta fila: Descripción */}
             <div className="space-y-2">
               <Label htmlFor="descripcion">Descripción</Label>
               <Textarea
