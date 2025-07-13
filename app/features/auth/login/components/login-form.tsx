@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
 import { AuthService } from "../../../../services/auth.service";
 import { Progress } from "../../../../components/ui/progress";
-import { useUser } from "@/contexts/UserContext"; // 🎯 IMPORTAR CONTEXTO
+import { useAuth } from "../../../../contexts/AuthContext"; // 🎯 CAMBIAR A useAuth
 
 export function LoginForm() {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
@@ -16,7 +16,7 @@ export function LoginForm() {
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { setUser } = useUser(); // 🎯 USAR CONTEXTO
+  const { login } = useAuth(); // 🎯 USAR login DIRECTAMENTE
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,19 +43,16 @@ export function LoginForm() {
 
     try {
       console.log("🔄 Iniciando login...");
-      const response = await AuthService.login(credentials);
+      const response = await login(credentials);
       console.log("📡 Respuesta del servidor:", response);
       
       if (response.success) {
         setProgress(100);
         
-        // 🎯 GUARDAR USUARIO EN CONTEXTO
-        setUser(response.user);
-        
         console.log("✅ Login exitoso, mostrando toast...");
         toast({
           title: "Inicio de sesión exitoso",
-          description: `Bienvenido, ${response.user.username}!`,
+          description: "Bienvenido!",
           variant: "default",
         });
 

@@ -13,7 +13,7 @@ import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/hooks/use-toast"
 import type { Notification } from "@/components/notifications-panel/notifications-panel"
 import { AuthService } from "@/services/auth.service"
-import { useUser } from "@/contexts/UserContext"
+import { useAuth } from "../../contexts/AuthContext" // 🎯 CAMBIAR A useAuth
 import { useTheme } from "@/contexts/ThemeContext" // 🎯 IMPORTAR useTheme
 import { usePermissions } from "@/hooks/use-permissions" // 🎯 IMPORTAR HOOK DE PERMISOS
 import { PermissionGuard } from "@/components/permission-guard/permission-guard" // 🎯 IMPORTAR GUARD
@@ -52,7 +52,7 @@ interface SystemConfig {
 
 export function ConfiguracionContent({ onAddNotification }: ConfiguracionContentProps) {
   const { toast } = useToast()
-  const { user, updateUser } = useUser()
+  const { user, updateUser } = useAuth() // 🎯 OBTENER updateUser TAMBIÉN
   const { theme, setTheme } = useTheme() // 🎯 USAR EL HOOK DE TEMA
   
   // 🎯 USAR HOOK DE PERMISOS

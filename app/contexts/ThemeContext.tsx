@@ -1,7 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { useUser } from './UserContext'
+import { useAuth } from './AuthContext' // 🎯 CAMBIAR A useAuth
 
 type Theme = 'light' | 'dark'
 
@@ -17,7 +17,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const { user, isLoading } = useUser()
+  const { user, isLoading } = useAuth() // 🎯 CAMBIAR A useAuth
   const [theme, setTheme] = useState<Theme>('dark')
   const [originalTheme, setOriginalTheme] = useState<Theme>('dark') // 🎯 TEMA DE LA BD
 

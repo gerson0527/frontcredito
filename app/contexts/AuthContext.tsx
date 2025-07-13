@@ -9,6 +9,12 @@ interface User {
   permisos: any;
   nombre?: string;
   apellido?: string;
+  nombres?: string;
+  apellidos?: string;
+  correo?: string;
+  telefono?: string;
+  cargo?: string;
+  theme?: string;
 }
 
 interface AuthContextType {
@@ -21,6 +27,7 @@ interface AuthContextType {
   }>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  updateUser: (userData: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -97,13 +104,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateUser = (userData: Partial<User>) => {
+    if (user) {
+      setUser({ ...user, ...userData });
+    }
+  };
+
   const value: AuthContextType = {
     user,
     isAuthenticated,
     isLoading,
     login,
     logout,
-    checkAuth
+    checkAuth,
+    updateUser
   };
 
   return (
