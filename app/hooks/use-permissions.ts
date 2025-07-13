@@ -1,5 +1,5 @@
 // Hook personalizado para manejar permisos
-import { useAuth } from "@/contexts/AuthContext"
+import { useAuth } from "../contexts/AuthContext"
 
 export type PermissionModule = 
   | 'creditos' 
