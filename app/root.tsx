@@ -9,9 +9,9 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { UserProvider } from "@/contexts/UserContext"; // 🎯 IMPORTAR CONTEXTO
-import { ThemeProvider } from "@/contexts/ThemeContext"; // 🎯 IMPORTAR CONTEXTO DE TEMA
-import { Toaster } from "@/components/toaster/toaster"; // 🎯 IMPORTAR TOASTER
+import { AuthProvider } from "./contexts/AuthContext"; // 🎯 CAMBIAR A AUTHPROVIDER
+import { ThemeProvider } from "./contexts/ThemeContext"; // 🎯 IMPORTAR CONTEXTO DE TEMA
+import { Toaster } from "./components/toaster/toaster"; // 🎯 IMPORTAR TOASTER
 
 
 export const links: Route.LinksFunction = () => [
@@ -37,12 +37,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <UserProvider>
+        <AuthProvider>
           <ThemeProvider>
             {children}  
             <Toaster /> {/* 🎯 AGREGAR TOASTER AQUÍ */}
           </ThemeProvider>
-        </UserProvider>
+        </AuthProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
