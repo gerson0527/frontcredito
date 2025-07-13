@@ -14,6 +14,12 @@ import { ComisionService, type Comision, type ResumenComision } from '@/services
 import { AsesorService, type Asesor } from '@/services/asesores.service'
 import { TablePagination } from "@/components/table-pagination/table-pagination"
 import { ActionModals } from "@/components/action-modals/action-modals"
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 
 
 interface ComisionesContentProps {
@@ -1520,4 +1526,4 @@ export function ComisionesContent({ onAddNotification }: ComisionesContentProps)
       </Dialog>
     </div>
   )
-}
+} 
