@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 
 interface ChatButtonProps {
   onClick: () => void;
-  hasUnreadMessages?: boolean;
+  hasUnreadMessages?: boolean; 
   unreadCount?: number;
 }
 

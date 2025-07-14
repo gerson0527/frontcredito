@@ -229,7 +229,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       loadUsers();
-      loadUnreadCounts();
+      loadUnreadCounts();  
     }
   }, [isOpen]);
 
