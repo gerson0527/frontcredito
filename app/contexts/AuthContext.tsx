@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { AuthService } from '../services/auth.service';
+import { ChatService } from '../services/chat.service';
 
 interface User {
   id: number;
@@ -76,6 +77,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsAuthenticated(true);
         // Marcar que hay una sesión activa
         localStorage.setItem('hasActiveSession', 'true');
+        
+        // Inicializar conexión Socket.IO para chat
+        ChatService.init(response.user.id);
       } else {
         // No hay sesión activa o expiró
         setUser(null);
@@ -102,6 +106,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsAuthenticated(true);
         // Marcar que hay una sesión activa
         localStorage.setItem('hasActiveSession', 'true');
+        
+        // Inicializar conexión Socket.IO para chat
+        ChatService.init(result.user.id);
+        
         return { success: true };
       } else {
         return { 
@@ -127,6 +135,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error('Error durante logout:', error);
     } finally {
+      // Desconectar Socket.IO
+      ChatService.disconnect();
+      
       setUser(null);
       setIsAuthenticated(false);
       setIsLoading(false);

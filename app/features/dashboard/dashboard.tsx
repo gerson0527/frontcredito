@@ -13,6 +13,9 @@ import { ReportesContent } from "@/features/sections/reportes-content"
 import { ConfiguracionContent } from "@/features/sections/configuracion-content"
 import { GestionUsuariosContent } from "@/features/sections/gestion-usuarios"
 import { Toaster } from "@/components/toaster/toaster"
+import { ChatPanel } from "@/components/chat/chat-panel"
+import { ChatButton } from "@/components/chat/chat-button"
+import { useChatContext } from "@/contexts/ChatContext"
 import type { Notification } from "@/components/notifications-panel/notifications-panel"
 import { usePermissions } from "@/hooks/use-permissions" // 🎯 IMPORTAR HOOK DE PERMISOS
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card" // 🎯 PARA MENSAJE DE ACCESO DENEGADO
@@ -20,7 +23,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function Component() {
   const [activeSection, setActiveSection] = useState("dashboard")
+  const [isChatOpen, setIsChatOpen] = useState(false)
   const { canViewModule } = usePermissions(); // 🎯 USAR HOOK DE PERMISOS
+  const { totalUnreadCount } = useChatContext(); // 🎯 USAR CONTEXTO DE CHAT
   
   const [notifications, setNotifications] = useState<Notification[]>([
     {
@@ -138,6 +143,19 @@ export default function Component() {
         />
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">{renderContent()}</main>
       </div>
+
+      {/* Botón flotante del chat */}
+      <ChatButton 
+        onClick={() => setIsChatOpen(true)}
+        hasUnreadMessages={totalUnreadCount > 0}
+        unreadCount={totalUnreadCount}
+      />
+
+      {/* Panel de chat */}
+      <ChatPanel 
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+      />
 
       <Toaster />
     </div>
