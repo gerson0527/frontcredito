@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { AuthProvider } from "./contexts/AuthContext"; // 🎯 CAMBIAR A AUTHPROVIDER
 import { ThemeProvider } from "./contexts/ThemeContext"; // 🎯 IMPORTAR CONTEXTO DE TEMA
+import { ChatProvider } from "./contexts/ChatContext"; // 🎯 IMPORTAR CONTEXTO DE CHAT
 import { Toaster } from "./components/toaster/toaster"; // 🎯 IMPORTAR TOASTER
 
 
@@ -39,8 +40,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <AuthProvider>
           <ThemeProvider>
-            {children}  
-            <Toaster /> {/* 🎯 AGREGAR TOASTER AQUÍ */}
+            <ChatProvider>
+              {children}  
+              <Toaster /> {/* 🎯 AGREGAR TOASTER AQUÍ */}
+            </ChatProvider>
           </ThemeProvider>
         </AuthProvider>
         <ScrollRestoration />
