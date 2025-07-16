@@ -1,7 +1,8 @@
 // Chat service para manejar usuarios y mensajes con Socket.IO
 import { io, Socket } from 'socket.io-client';
 
-const API_BASE_URL = 'http://localhost:3000'
+const API_BASE_URL = 'https://backcreditos2025-backcreditos.up.railway.app'
+//const API_BASE_URL = 'http://localhost:3000'
 
 export interface ChatUser {
   id: number;
